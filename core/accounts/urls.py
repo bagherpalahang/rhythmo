@@ -10,5 +10,4 @@ urlpatterns = [
     path('otp/', views.ValidateOtpView.as_view(), name='otp'),
     path('change_profile/', views.ChangeUserData.as_view(), name='change_profile'),
     path('change_password/', views.ChangeUserPassword.as_view(), name='change_password'),
-    path('get_user_data/', views.GetUserData.as_view(), name='get_user_data'),
 ]

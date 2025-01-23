@@ -151,16 +151,3 @@ class ChangeUserPassword(APIView):
         serialized_data = serializer.data
 
         return Response(serialized_data)
-    
-class GetUserData(APIView):
-
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        user = request.user
-
-        serializer = CustomUserSerializer(user, many=False)
-        serialized_data = serializer.data
-
-        return Response(serialized_data)

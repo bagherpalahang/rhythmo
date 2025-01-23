@@ -39,7 +39,6 @@ class CustomUser(AbstractUser):
     username = None
     phonenumber = PhoneNumberField(unique=True)
     email = models.EmailField(unique=False, blank=True)
-    is_artist = models.BooleanField(blank=False, default=False)
     USERNAME_FIELD = "phonenumber"
     REQUIRED_FIELDS = []
     EMAIL_FIELD = 'email'

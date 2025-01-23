@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # third apps
     'phonenumber_field',
     'rest_framework',
+    'rest_framework.authtoken',
 
     # other apps
     'accounts.apps.AccountsConfig',
