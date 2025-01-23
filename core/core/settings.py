@@ -39,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # third apps
-    "phonenumber_field",
+    'phonenumber_field',
+    'rest_framework',
 
     # other apps
     'accounts.apps.AccountsConfig',
@@ -128,3 +129,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 PHONENUMBER_DEFAULT_REGION = "IR"
+AUTH_USER_MODEL = "accounts.CustomUser"
