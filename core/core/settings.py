@@ -42,10 +42,12 @@ INSTALLED_APPS = [
     'phonenumber_field',
     'rest_framework',
     'rest_framework.authtoken',
+    'django_filters',
 
     # other apps
     'accounts.apps.AccountsConfig',
-    'artists.apps.ArtistsConfig'
+    'artists.apps.ArtistsConfig',
+    'search.apps.SearchConfig',
 ]
 
 MIDDLEWARE = [
