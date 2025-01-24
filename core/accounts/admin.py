@@ -10,7 +10,7 @@ class CustomAdmin(UserAdmin):
     change_user_password_template = None
     fieldsets = (
         (None, {"fields": ("phonenumber", "password")}),
-        (("Personal info"), {"fields": ("first_name", "last_name", "email", "is_artist")}),
+        (("Personal info"), {"fields": ("first_name", "last_name", "email")}),
         (
             ("Permissions"),
             {

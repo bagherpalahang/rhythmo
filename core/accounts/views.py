@@ -22,19 +22,21 @@ class RegisterView(APIView):
         return otp
 
     def sending_sms(self, mobile_phone, otp):
-        apikey = "n6krueczY5KX_5O5qnpH6cmAoemMAsdjFcU_uJW4UUs="
-        pid = "ibe8ahmuqytxpg9"
-        fnum = "3000505"
-        tnum = mobile_phone
-        p1 = "code"
-        v1 = otp
+        print(f'given otp for {mobile_phone} is {otp}')
+        return True
+        # apikey = "n6krueczY5KX_5O5qnpH6cmAoemMAsdjFcU_uJW4UUs="
+        # pid = "ibe8ahmuqytxpg9"
+        # fnum = "3000505"
+        # tnum = mobile_phone
+        # p1 = "code"
+        # v1 = otp
 
-        sms_url = f'http://ippanel.com:8080/?apikey={apikey}&pid={pid}&fnum={fnum}&tnum={tnum}&p1={p1}&v1={v1}'
-        response = requests.get(sms_url)
+        # sms_url = f'http://ippanel.com:8080/?apikey={apikey}&pid={pid}&fnum={fnum}&tnum={tnum}&p1={p1}&v1={v1}'
+        # response = requests.get(sms_url)
         
-        if response.status_code == 201:
-            return True
-        return False
+        # if response.status_code == 201:
+        #     return True
+        # return False
 
 
     def post(self, request):
