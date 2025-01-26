@@ -1,4 +1,4 @@
-from django.db.models import Q
+import json
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.pagination import PageNumberPagination
@@ -18,9 +18,11 @@ class GlobalSearchView(APIView):
     pagination_class = CustomPagination
 
     def get(self, request):
-        query = request.query_params.get('q', '').strip()
 
-        if not query:
+        json_data = json.loads(request.body)
+        query = json_data['query']
+
+        if not query or len(query) <= 3:
             return Response([])
         
         results = []

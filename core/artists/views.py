@@ -57,27 +57,21 @@ class FollowedArtistsContent(APIView):
 
         return Response(combined_results)
 
-class LikeSongView(APIView):
-    def post(self, request, song_id):
+class ToggleLikeSongView(APIView):
+    def post(self, request):
+
+        json_data = json.loads(request.body)
+        song_id = int(json_data['song_id'])
+
         song = get_object_or_404(Song, id=song_id)
         user = request.user
 
         if user in song.liked_by.all():
-            return Response({"message": "You have already liked this song."}, status=status.HTTP_400_BAD_REQUEST)
-
-        song.liked_by.add(user)
-        return Response({"message": "You have liked this song."}, status=status.HTTP_200_OK)
-
-class UnlikeSongView(APIView):
-    def post(self, request, song_id):
-        song = get_object_or_404(Song, id=song_id)
-        user = request.user
-
-        if user not in song.liked_by.all():
-            return Response({"message": "You have not liked this song."}, status=status.HTTP_400_BAD_REQUEST)
-
-        song.liked_by.remove(user)
-        return Response({"message": "You have unliked this song."}, status=status.HTTP_200_OK)
+            song.liked_by.remove(user)
+            return Response({"message": "You have unliked this song."}, status=status.HTTP_200_OK)
+        else:
+            song.liked_by.add(user)
+            return Response({"message": "You have liked this song."}, status=status.HTTP_200_OK)
 
 class LikedSongsView(generics.ListAPIView):
     serializer_class = SongSerializer
