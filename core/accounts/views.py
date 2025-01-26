@@ -1,5 +1,4 @@
 import json
-import requests
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from rest_framework.views import APIView

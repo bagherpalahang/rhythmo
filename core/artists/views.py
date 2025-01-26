@@ -1,3 +1,4 @@
+import json
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -8,28 +9,29 @@ from .models import Artist, Song, Album
 
 # Create your views here.
 
-class FollowArtistView(APIView):
-    def post(self, request, artist_id):
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from django.shortcuts import get_object_or_404
+import json
+from .models import Artist
+
+class ToggleFollowArtistView(APIView):
+    def post(self, request):
+
+        json_data = json.loads(request.body)
+        artist_id = int(json_data['artist_id'])
+
         artist = get_object_or_404(Artist, id=artist_id)
         user = request.user
 
         if user in artist.followers.all():
-            return Response({"message": "You are already following this artist."}, status=status.HTTP_400_BAD_REQUEST)
-
-        artist.followers.add(user)
-        return Response({"message": "You are now following this artist."}, status=status.HTTP_200_OK)
-
-class UnfollowArtistView(APIView):
-    def post(self, request, artist_id):
-        artist = get_object_or_404(Artist, id=artist_id)
-        user = request.user
-
-        if user not in artist.followers.all():
-            return Response({"message": "You are not following this artist."}, status=status.HTTP_400_BAD_REQUEST)
-
-        artist.followers.remove(user)
-        return Response({"message": "You have unfollowed this artist."}, status=status.HTTP_200_OK)
-    
+            artist.followers.remove(user)
+            return Response({"message": "You have unfollowed this artist."}, status=status.HTTP_200_OK)
+        else:
+            artist.followers.add(user)
+            return Response({"message": "You are now following this artist."}, status=status.HTTP_200_OK)
+        
 class FollowedArtistsView(generics.ListAPIView):
     serializer_class = ArtistSerializer
 

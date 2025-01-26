@@ -1,10 +1,9 @@
 from django.urls import path
-from .views import FollowArtistView, UnfollowArtistView, FollowedArtistsView, FollowedArtistsContent\
+from .views import ToggleFollowArtistView, FollowedArtistsView, FollowedArtistsContent\
     ,LikeSongView, UnlikeSongView, LikedSongsView
 
 urlpatterns = [
-    path('artists/<int:artist_id>/follow/', FollowArtistView.as_view(), name='follow_artist'),
-    path('artists/<int:artist_id>/unfollow/', UnfollowArtistView.as_view(), name='unfollow_artist'),
+    path('toggle_follow_artist/', ToggleFollowArtistView.as_view(), name='toggle_follow_artist'),
     path('followed-artists/', FollowedArtistsView.as_view(), name='followed_artists'),
     path('followed-content/', FollowedArtistsContent.as_view(), name='followed_content'),
     path('songs/<int:song_id>/like/', LikeSongView.as_view(), name='like_song'),
