@@ -12,16 +12,19 @@ class ArtistSerializer(serializers.ModelSerializer):
         return obj.followers.count()
     
 class SongSerializer(serializers.ModelSerializer):
-    is_liked = serializers.SerializerMethodField()
+    
+    artist = serializers.CharField(source='artist.name')  # This will return the artist's name
 
     class Meta:
         model = Song
         fields = ['id', 'title', 'artist', 'album', 'audio_file', 'duration', 'created_at', 'is_liked']
 
+    is_liked = serializers.SerializerMethodField()
+
     def get_is_liked(self, obj):
         user = self.context['request'].user
         return user in obj.liked_by.all()
-
+    
 class AlbumSerializer(serializers.ModelSerializer):
     class Meta:
         model = Album
