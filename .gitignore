@@ -169,3 +169,56 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+# Flutter specific files
+.DS_Store
+.flutter-plugins
+.flutter-plugins-dependencies
+.vscode/
+build/
+ios/Podfile.lock
+lib/generated/
+**.iml
+
+# Android specific files
+android/app/build/
+android/app/src/profile/
+android/gradle/wrapper/
+android/local.properties
+
+# iOS specific files
+ios/Flutter/App.framework
+ios/Pods/
+ios/Runner.xcarchive
+ios/build/
+
+# Visual Studio Code specific files
+.vscode/launch.json
+.vscode/tasks.json
+
+# IntelliJ IDEA specific files
+*.iml
+.idea/
+
+# Xcode specific files
+*.xcworkspace
+xcuserdata/
+
+# Build output
+*.apk
+*.ipa
+
+# Local history files
+.dart_tool/build/
+.dart_tool/package_config.json
+.dart_tool/pub/
+.dart_tool/flutter_build/
+
+# Logs
+*.log
+
+# Auto-generated files
+pubspec.lock
+
+# Testing directories
+test/
