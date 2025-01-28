@@ -11,6 +11,8 @@ from artists.serializers import ArtistSerializer, AlbumSerializer, SongSerialize
 class GlobalSearchView(APIView):
     def get(self, request, query):
 
+        query = query.lower()
+         
         if not query or len(query) <= 3:
             return Response([])
         
