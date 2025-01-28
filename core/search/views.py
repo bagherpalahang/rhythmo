@@ -17,10 +17,7 @@ class CustomPagination(PageNumberPagination):
 class GlobalSearchView(APIView):
     pagination_class = CustomPagination
 
-    def get(self, request):
-
-        json_data = json.loads(request.body)
-        query = json_data['query']
+    def get(self, request, query):
 
         if not query or len(query) <= 3:
             return Response([])
