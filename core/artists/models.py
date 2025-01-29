@@ -44,7 +44,7 @@ class Song(models.Model):
                     print("Audio metadata could not be read.")
             except Exception as e:
                 print(f"Error reading file: {e}")
-        super().save(*args, **kwargs)
+        super(  ).save(*args, **kwargs)
 
 
     def __str__(self):
