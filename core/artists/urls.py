@@ -10,5 +10,4 @@ urlpatterns = [
     path('liked_songs/', LikedSongsView.as_view(), name='liked_songs'),
     path('albums/<int:album_id>/songs/', AlbumSongsView.as_view(), name='album-songs'),
     path('<int:pk>/detail/', ArtistDetailView.as_view(), name='artist-detail'),
-
 ]
