@@ -13,7 +13,7 @@ class ArtistSerializer(serializers.ModelSerializer):
     
 class SongSerializer(serializers.ModelSerializer):
     
-    artist = serializers.CharField(source='artist.name')  # This will return the artist's name
+    artist = serializers.CharField(source='artist.name')
 
     class Meta:
         model = Song
