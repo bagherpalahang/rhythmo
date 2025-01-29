@@ -1,5 +1,7 @@
 import json
 from django.contrib.auth import get_user_model
+from django.middleware.csrf import get_token
+from django.http import JsonResponse
 from django.core.cache import cache
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -58,15 +60,15 @@ class RegisterView(APIView):
                             'password': password,
                         }, timeout=300) 
 
-                        return Response({'message': 'OTP sent successfully'}, status=200)
+                        return Response({'message': 'کد تایید با موفقیت ارسال شد'}, status=200)
                     else:
-                        return Response({'message': "SMS wasn't send"}, status=400)
+                        return Response({'message': "اس ام اس ارسال شد"}, status=400)
                 else:
-                    return Response({'message': "Passwords don't match"}, status=400)
+                    return Response({'message': "پسورد ها یکسان نیستند"}, status=400)
             else:
-                return Response({'message': 'Invalid mobile phone number'}, status=400)
+                return Response({'message': 'شماره موبایل درست نیست'}, status=400)
         else:
-            return Response({'message': 'User already registered'}, status=400)
+            return Response({'message': 'این کاربر قبلا ثبت نام کرده'}, status=400)
 
 
 class ValidateOtpView(APIView):
@@ -93,11 +95,11 @@ class ValidateOtpView(APIView):
                 cache.delete(phone_number)
                 cache.delete(phone_number + '_details')
 
-                return Response({'message': 'User registered successfully'}, status=200)
+                return Response({'message': 'کاربر با موفقیت ثبت نام کرد'}, status=200)
             else:
-                return Response({'message': 'User details expired'}, status=400)
+                return Response({'message': 'مجدد اقدام کنید'}, status=400)
         else:
-            return Response({'message': 'Invalid OTP'}, status=400)
+            return Response({'message': 'کد تایید نامعتبر است'}, status=400)
 
 
 class ChangeUserData(APIView):
@@ -121,7 +123,7 @@ class ChangeUserData(APIView):
             account.email = email
             account.save()
         else:
-            return Response({'message' : 'some data isn\'t valid'}, 400)
+            return Response({'message' : 'اطلاعات را درست وارد کنید'}, 400)
 
         serializer = CustomUserSerializer(account, many=False)
         serialized_data = serializer.data
@@ -146,7 +148,7 @@ class ChangeUserPassword(APIView):
             account.set_password(password)
             account.save()
         else:
-            return Response({'message' : 'password is too weak'}, 400)
+            return Response({'message' : 'پسورد ضعیف است'}, 400)
 
         serializer = CustomUserSerializer(account, many=False)
         serialized_data = serializer.data

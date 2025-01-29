@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.shortcuts import get_object_or_404
 
-from .serializers import ArtistSerializer, SongSerializer, AlbumSerializer
+from .serializers import ArtistSerializer, SongSerializer, AlbumSerializer, ArtistDetailSerializer
 from .models import Artist, Song, Album
 
 # Create your views here.
@@ -78,3 +78,14 @@ class LikedSongsView(generics.ListAPIView):
 
     def get_queryset(self):
         return self.request.user.liked_songs.all()
+
+class AlbumSongsView(generics.ListAPIView):
+    serializer_class = SongSerializer
+
+    def get_queryset(self):
+        album_id = self.kwargs['album_id']
+        return Song.objects.filter(album_id=album_id)
+
+class ArtistDetailView(generics.RetrieveAPIView):
+    queryset = Artist.objects.all()
+    serializer_class = ArtistDetailSerializer
