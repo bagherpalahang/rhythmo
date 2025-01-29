@@ -29,3 +29,12 @@ class AlbumSerializer(serializers.ModelSerializer):
     class Meta:
         model = Album
         fields = ['id', 'title', 'artist', 'release_date']
+
+class ArtistDetailSerializer(serializers.ModelSerializer):
+    albums = AlbumSerializer(many=True, read_only=True, source='album_set')
+    songs = SongSerializer(many=True, read_only=True, source='songs')
+
+    class Meta:
+        model = Artist
+        fields = ['id', 'name', 'bio', 'albums', 'songs']
+
