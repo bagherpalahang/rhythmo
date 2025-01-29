@@ -32,7 +32,7 @@ class AlbumSerializer(serializers.ModelSerializer):
 
 class ArtistDetailSerializer(serializers.ModelSerializer):
     albums = AlbumSerializer(many=True, read_only=True, source='album_set')
-    songs = SongSerializer(many=True, read_only=True, source='songs')
+    songs = SongSerializer(many=True, read_only=True)
 
     class Meta:
         model = Artist
