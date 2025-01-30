@@ -2,6 +2,7 @@ import json
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 
 from .serializers import ArtistSerializer, SongSerializer, AlbumSerializer, ArtistDetailSerializer
@@ -9,14 +10,9 @@ from .models import Artist, Song, Album
 
 # Create your views here.
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.shortcuts import get_object_or_404
-import json
-from .models import Artist
-
 class ToggleFollowArtistView(APIView):
+    permission_classes = [IsAuthenticated]    
+
     def post(self, request):
 
         json_data = json.loads(request.body)
@@ -31,7 +27,15 @@ class ToggleFollowArtistView(APIView):
         else:
             artist.followers.add(user)
             return Response({"message": "You are now following this artist."}, status=status.HTTP_200_OK)
-        
+
+class CheckFollowArtistView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, artist_id):
+        artist = get_object_or_404(Artist, id=artist_id)
+        is_following = artist.followers.filter(id=request.user.id).exists()
+        return Response({'is_following': is_following})
+
 class FollowedArtistsView(generics.ListAPIView):
     serializer_class = ArtistSerializer
 
@@ -39,6 +43,8 @@ class FollowedArtistsView(generics.ListAPIView):
         return self.request.user.following_artists.all()
 
 class FollowedArtistsContent(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         user = request.user
         followed_artists = user.following_artists.all()
@@ -58,6 +64,8 @@ class FollowedArtistsContent(APIView):
         return Response(combined_results)
 
 class ToggleLikeSongView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
 
         json_data = json.loads(request.body)
