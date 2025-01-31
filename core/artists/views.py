@@ -64,7 +64,7 @@ class FollowedArtistsContent(APIView):
             reverse=True
         )
 
-        return Response(combined_results)
+        return Response(combined_results, status=200)
 
 class ToggleLikeSongView(APIView):
     permission_classes = [IsAuthenticated]
