@@ -2,6 +2,7 @@ import json
 from rest_framework import status, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 
 from .serializers import ArtistSerializer, SongSerializer, AlbumSerializer, ArtistDetailSerializer
@@ -9,14 +10,9 @@ from .models import Artist, Song, Album
 
 # Create your views here.
 
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
-from django.shortcuts import get_object_or_404
-import json
-from .models import Artist
-
 class ToggleFollowArtistView(APIView):
+    permission_classes = [IsAuthenticated]    
+
     def post(self, request):
 
         json_data = json.loads(request.body)
@@ -31,22 +27,35 @@ class ToggleFollowArtistView(APIView):
         else:
             artist.followers.add(user)
             return Response({"message": "You are now following this artist."}, status=status.HTTP_200_OK)
-        
-class FollowedArtistsView(generics.ListAPIView):
-    serializer_class = ArtistSerializer
 
-    def get_queryset(self):
-        return self.request.user.following_artists.all()
+class CheckFollowArtistView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, artist_id):
+        artist = get_object_or_404(Artist, id=artist_id)
+        is_following = artist.followers.filter(id=request.user.id).exists()
+        return Response({'is_following': is_following})
+
+class FollowedArtistsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        followed_artists = request.user.following_artists.all() 
+        serializer = ArtistSerializer(followed_artists, many=True)  
+        return Response(serializer.data)
 
 class FollowedArtistsContent(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
+
         user = request.user
         followed_artists = user.following_artists.all()
 
         songs = Song.objects.filter(artist__in=followed_artists).order_by('-created_at')
         albums = Album.objects.filter(artist__in=followed_artists).order_by('-release_date')
 
-        song_serializer = SongSerializer(songs, many=True)
+        song_serializer = SongSerializer(songs, many=True, context={'request': request})
         album_serializer = AlbumSerializer(albums, many=True)
 
         combined_results = sorted(
@@ -58,6 +67,8 @@ class FollowedArtistsContent(APIView):
         return Response(combined_results)
 
 class ToggleLikeSongView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def post(self, request):
 
         json_data = json.loads(request.body)

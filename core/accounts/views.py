@@ -60,15 +60,15 @@ class RegisterView(APIView):
                             'password': password,
                         }, timeout=300) 
 
-                        return Response({'message': 'کد تایید با موفقیت ارسال شد'}, status=200)
+                        return Response({'message': 'Verification code sent successfully'}, status=200)
                     else:
-                        return Response({'message': "اس ام اس ارسال شد"}, status=400)
+                        return Response({'message': "SMS sent"}, status=400)
                 else:
-                    return Response({'message': "پسورد ها یکسان نیستند"}, status=400)
+                    return Response({'message': "Passwords do not match"}, status=400)
             else:
-                return Response({'message': 'شماره موبایل درست نیست'}, status=400)
+                return Response({'message': 'Invalid phone number'}, status=400)
         else:
-            return Response({'message': 'این کاربر قبلا ثبت نام کرده'}, status=400)
+            return Response({'message': 'This user is already registered'}, status=400)
 
 
 class ValidateOtpView(APIView):
@@ -95,11 +95,11 @@ class ValidateOtpView(APIView):
                 cache.delete(phone_number)
                 cache.delete(phone_number + '_details')
 
-                return Response({'message': 'کاربر با موفقیت ثبت نام کرد'}, status=200)
+                return Response({'message': 'User successfully registered'}, status=200)
             else:
-                return Response({'message': 'مجدد اقدام کنید'}, status=400)
+                return Response({'message': 'Please try again'}, status=400)
         else:
-            return Response({'message': 'کد تایید نامعتبر است'}, status=400)
+            return Response({'message': 'Invalid verification code'}, status=400)
 
 
 class ChangeUserData(APIView):
@@ -123,7 +123,7 @@ class ChangeUserData(APIView):
             account.email = email
             account.save()
         else:
-            return Response({'message' : 'اطلاعات را درست وارد کنید'}, 400)
+            return Response({'message' : 'Fill data correctly'}, 400)
 
         serializer = CustomUserSerializer(account, many=False)
         serialized_data = serializer.data
@@ -148,9 +148,18 @@ class ChangeUserPassword(APIView):
             account.set_password(password)
             account.save()
         else:
-            return Response({'message' : 'پسورد ضعیف است'}, 400)
+            return Response({'message' : 'Password is too weak'}, 400)
 
         serializer = CustomUserSerializer(account, many=False)
         serialized_data = serializer.data
 
         return Response(serialized_data)
+
+class UserDetailView(APIView):
+    permission_classes = [IsAuthenticated] 
+
+    def get(self, request):
+        user = request.user 
+        serializer = CustomUserSerializer(user)
+        return Response(serializer.data)
+    
