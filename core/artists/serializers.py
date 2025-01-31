@@ -26,6 +26,9 @@ class SongSerializer(serializers.ModelSerializer):
         return user in obj.liked_by.all()
     
 class AlbumSerializer(serializers.ModelSerializer):
+
+    # artist = serializers.CharField(source='artist.name')
+
     class Meta:
         model = Album
         fields = ['id', 'title', 'artist', 'release_date']

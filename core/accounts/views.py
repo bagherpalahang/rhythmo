@@ -60,9 +60,9 @@ class RegisterView(APIView):
                             'password': password,
                         }, timeout=300) 
 
-                        return Response({'message': 'Verification code sent successfully'}, status=200)
+                        return Response({'message': 'Verification code sent successfully'}, status=201)
                     else:
-                        return Response({'message': "SMS sent"}, status=400)
+                        return Response({'message': "SMS didn't sent"}, status=400)
                 else:
                     return Response({'message': "Passwords do not match"}, status=400)
             else:
