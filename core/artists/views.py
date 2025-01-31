@@ -36,23 +36,26 @@ class CheckFollowArtistView(APIView):
         is_following = artist.followers.filter(id=request.user.id).exists()
         return Response({'is_following': is_following})
 
-class FollowedArtistsView(generics.ListAPIView):
-    serializer_class = ArtistSerializer
+class FollowedArtistsView(APIView):
+    permission_classes = [IsAuthenticated]
 
-    def get_queryset(self):
-        return self.request.user.following_artists.all()
+    def get(self, request):
+        followed_artists = request.user.following_artists.all() 
+        serializer = ArtistSerializer(followed_artists, many=True)  
+        return Response(serializer.data)
 
 class FollowedArtistsContent(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
+
         user = request.user
         followed_artists = user.following_artists.all()
 
         songs = Song.objects.filter(artist__in=followed_artists).order_by('-created_at')
         albums = Album.objects.filter(artist__in=followed_artists).order_by('-release_date')
 
-        song_serializer = SongSerializer(songs, many=True)
+        song_serializer = SongSerializer(songs, many=True, context={'request': request})
         album_serializer = AlbumSerializer(albums, many=True)
 
         combined_results = sorted(
